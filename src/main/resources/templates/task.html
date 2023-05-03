@@ -37,37 +37,12 @@
         </b>
     </div>
     <div class="h3" align="center">
-        <p>Невыполненные задачи</p>
+        <p>Задача</p>
     </div>
-    <div class="row">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">id</th>
-                <th scope="col">Описание</th>
-                <th scope="col">Дата создания</th>
-                <th scope="col">Выполнено</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="task:${tasks}">
-                <td th:text="${task.id}"></td>
-                <td>
-                    <a th:href="@{|/task/${task.id}|}">
-                        <i th:text="${task.description}"></i>
-                    </a>
-                </td>
-                <td th:text="${#temporals.format(task.created)}"></td>
-                <td th:if="${task.done}">
-                    <i class="fa fa-check-square-o"></i>
-                </td>
-                <td th:if="${!task.done}">
-                    <i class="fa fa-square-o"></i>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+
+    <!-- TODO Добавить описание, кнопки -->
+
+
     <div>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">Add task</button>
     </div>

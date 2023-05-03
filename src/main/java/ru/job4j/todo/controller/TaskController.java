@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.service.TaskService;
@@ -42,6 +43,13 @@ public class TaskController {
         taskService.addTask(task);
         return "redirect:allTasks";
     }
+
+    @GetMapping("/task/{taskId}")
+    public String showOneTask(Model model, @PathVariable("taskId") int id) {
+        // TODO добавить логику
+        return "task";
+    }
+
 
 
 }

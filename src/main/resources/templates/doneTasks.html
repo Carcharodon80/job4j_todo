@@ -52,7 +52,11 @@
             <tbody>
             <tr th:each="task:${tasks}">
                 <td th:text="${task.id}"></td>
-                <td th:text="${task.description}"></td>
+                <td>
+                    <a th:href="@{|/task/${task.id}|}">
+                        <i th:text="${task.description}"></i>
+                    </a>
+                </td>
                 <td th:text="${#temporals.format(task.created)}"></td>
                 <td th:if="${task.done}">
                     <i class="fa fa-check-square-o"></i>
