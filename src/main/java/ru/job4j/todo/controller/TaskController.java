@@ -23,9 +23,25 @@ public class TaskController {
         return "allTasks";
     }
 
+    @GetMapping("/doneTasks")
+    public String showDoneTasks(Model model) {
+        List<Task> taskList = taskService.findDoneTasks();
+        model.addAttribute("tasks", taskList);
+        return "doneTasks";
+    }
+
+    @GetMapping("/undoneTasks")
+    public String showUndoneTasks(Model model) {
+        List<Task> taskList = taskService.findUndoneTasks();
+        model.addAttribute("tasks", taskList);
+        return "undoneTasks";
+    }
+
     @PostMapping("/addTask")
     public String addTask(@ModelAttribute Task task) {
         taskService.addTask(task);
         return "redirect:allTasks";
     }
+
+
 }

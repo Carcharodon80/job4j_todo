@@ -36,11 +36,11 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public List<Task> findDoneTasks() {
-        return null;
+        return taskStore.findDoneTasks();
     }
 
     @Override
-    public List<Task> findNewTasks() {
-        return null;
+    public List<Task> findUndoneTasks() {
+        return taskStore.findUndoneTasks();
     }
 }
