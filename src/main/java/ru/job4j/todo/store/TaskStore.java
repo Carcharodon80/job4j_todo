@@ -13,21 +13,20 @@ import java.util.List;
 @AllArgsConstructor
 public class TaskStore {
     private final SessionFactory sf;
-    private static final String findAll = "FROM Task";
-    private static final String findDone = "FROM Task WHERE done = true";
-    private static final String findUndone = "FROM Task WHERE done = false";
-
+    private static final String FIND_ALL = "FROM Task";
+    private static final String FIND_DONE = "FROM Task WHERE done = true";
+    private static final String FIND_UNDONE = "FROM Task WHERE done = false";
 
     public List<Task> findAllTasks() {
-        return findTasks(findAll);
+        return findTasks(FIND_ALL);
     }
 
     public List<Task> findDoneTasks() {
-        return findTasks(findDone);
+        return findTasks(FIND_DONE);
     }
 
     public List<Task> findUndoneTasks() {
-        return findTasks(findUndone);
+        return findTasks(FIND_UNDONE);
     }
 
     private List<Task> findTasks(String query) {
@@ -56,5 +55,54 @@ public class TaskStore {
         } finally {
             session.close();
         }
+    }
+
+    public Task findTaskById(int id) {
+        Session session = sf.openSession();
+        Task task = new Task();
+        try {
+            session.beginTransaction();
+            task = session.get(Task.class, id);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return task;
+    }
+
+    public boolean deleteTask(Integer id) {
+        Session session = sf.openSession();
+        Task task = new Task();
+        task.setId(id);
+        boolean result = false;
+        try {
+            session.beginTransaction();
+            session.delete(task);
+            session.getTransaction().commit();
+            result = true;
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return result;
+    }
+
+    public boolean updateTask(Task task) {
+        Session session = sf.openSession();
+        boolean result = false;
+        try {
+            session.beginTransaction();
+            session.update(task);
+            session.getTransaction().commit();
+            result = true;
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return result;
     }
 }

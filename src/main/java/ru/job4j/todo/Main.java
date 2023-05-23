@@ -17,7 +17,6 @@ public class Main {
         return new MetadataSources(registry).buildMetadata().buildSessionFactory();
     }
 
-
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
         System.out.println("Go to http://localhost:8080/allTasks");

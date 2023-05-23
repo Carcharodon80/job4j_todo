@@ -3,10 +3,7 @@ package ru.job4j.todo.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.service.TaskService;
 
@@ -46,10 +43,26 @@ public class TaskController {
 
     @GetMapping("/task/{taskId}")
     public String showOneTask(Model model, @PathVariable("taskId") int id) {
-        // TODO добавить логику
+        model.addAttribute("task", taskService.findTaskById(id));
         return "task";
     }
 
+    @PostMapping("/deleteTask")
+    public String deleteTask(@RequestParam Integer id) {
+        taskService.deleteTask(id);
+        return "redirect:allTasks";
+    }
 
+    @GetMapping("/changeStatusTask")
+    public String changeStatusOfTask(@RequestParam Integer id) {
+        taskService.changeStatusOfTask(id);
+        return "redirect:allTasks";
+    }
 
+    @PostMapping("/updateDescription")
+    public String updateDescription(@RequestParam int id, @RequestParam String newDescription, Model model) {
+        taskService.updateDescription(id, newDescription);
+        model.addAttribute("task", taskService.findTaskById(id));
+        return "task";
+    }
 }

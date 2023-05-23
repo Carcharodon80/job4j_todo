@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -37,34 +37,51 @@
         </b>
     </div>
     <div class="h3" align="center">
-        <p>Задача</p>
+        <a>Задача #</a>
+        <a th:text="${task.id}"></a>
     </div>
-
-    <!-- TODO Добавить описание, кнопки -->
-
-
     <div>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">Add task</button>
+        <p style="border:1px solid;" th:text="${task.description}"></p>
     </div>
-    <div class="modal fade" id="modal" tabindex="-1" aria-hidden="true">
+    <div style="display: inline-flex; float: right">
+        <form th:action="@{/changeStatusTask}" th:metod="get">
+            <input name="id" type="hidden" th:value="${task.id}">
+            <div th:switch="${task.done}">
+                <a th:case="true">
+                    <input class="btn btn-primary" type="submit" value="Вернуть в работу">
+                </a>
+                <a th:case="false">
+                    <input class="btn btn-primary" type="submit" value="Выполнено">
+                </a>
+            </div>
+        </form>
+        <input class="btn btn-primary" data-toggle="modal" data-target="#edit" value="Редактировать">
+        <form th:action="@{/deleteTask}" th:method="post">
+            <input name="id" type="hidden" th:value="${task.id}">
+            <input class="btn btn-primary" type="submit" value="Удалить">
+        </form>
+    </div>
+    <div class="modal fade" id="edit" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add task</h5>
+                    <h5 class="modal-title">Редактировать задачу</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">X</span>
                     </button>
                 </div>
-                <form th:action="@{/addTask}" method="post" enctype="multipart/form-data">
+                <form th:action="@{/updateDescription}" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
+                        <input name="id" type="hidden" th:value="${task.id}">
                         <div class="form-group">
-                            <label for="description">Description</label>
-                            <input type="text" class="form-control" name="description" id="description">
+                            <label for="newDescription">Описание</label>
+                            <input type="text" class="form-control" name="newDescription" id="newDescription"
+                                   th:value="${task.description}">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Add new task</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Сохранить</button>
                     </div>
                 </form>
             </div>
