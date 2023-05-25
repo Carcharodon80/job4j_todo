@@ -1,4 +1,4 @@
-package ru.job4j.todo.store;
+package ru.job4j.todo.repository;
 
 import lombok.AllArgsConstructor;
 import org.hibernate.Session;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @AllArgsConstructor
-public class TaskStore {
+public class TaskRepository {
     private final SessionFactory sf;
     private static final String FIND_ALL = "FROM Task";
     private static final String FIND_DONE = "FROM Task WHERE done = true";
