@@ -1,0 +1,1 @@
+ALTER TABLE tasks ADD title TEXT NOT NULL DEFAULT 'New task';

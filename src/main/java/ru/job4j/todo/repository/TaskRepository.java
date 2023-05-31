@@ -8,14 +8,15 @@ import ru.job4j.todo.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 public class TaskRepository {
     private final SessionFactory sf;
-    private static final String FIND_ALL = "FROM Task";
-    private static final String FIND_DONE = "FROM Task WHERE done = true";
-    private static final String FIND_UNDONE = "FROM Task WHERE done = false";
+    private static final String FIND_ALL = "FROM Task ORDER BY id";
+    private static final String FIND_DONE = "FROM Task WHERE done = true ORDER BY id ";
+    private static final String FIND_UNDONE = "FROM Task WHERE done = false ORDER BY id";
 
     public List<Task> findAllTasks() {
         return findTasks(FIND_ALL);
@@ -57,22 +58,23 @@ public class TaskRepository {
         }
     }
 
-    public Task findTaskById(int id) {
+    public Optional<Task> findTaskById(int id) {
         Session session = sf.openSession();
-        Task task = new Task();
+        Optional<Task> optional = Optional.empty();
         try {
             session.beginTransaction();
-            task = session.get(Task.class, id);
+            Task task = session.get(Task.class, id);
             session.getTransaction().commit();
+            optional = Optional.of(task);
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
-        return task;
+        return optional;
     }
 
-    public boolean deleteTask(Integer id) {
+    public boolean deleteTask(int id) {
         Session session = sf.openSession();
         Task task = new Task();
         task.setId(id);
@@ -96,6 +98,25 @@ public class TaskRepository {
         try {
             session.beginTransaction();
             session.update(task);
+            session.getTransaction().commit();
+            result = true;
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return result;
+    }
+
+    public boolean changeStatusOfTask(int id, boolean done) {
+        boolean result = false;
+        Session session = sf.openSession();
+        try {
+            session.beginTransaction();
+            session.createQuery("UPDATE Task SET done = :done WHERE id = :id")
+                    .setParameter("done", !done)
+                    .setParameter("id", id)
+                    .executeUpdate();
             session.getTransaction().commit();
             result = true;
         } catch (Exception e) {

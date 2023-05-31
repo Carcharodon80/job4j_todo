@@ -31,19 +31,22 @@
     </nav>
     <div align="right">
         <b>
-            <a th:href="@{/allTasks}">Все задачи</a>
-            <a th:href="@{/doneTasks}">Выполненные</a>
-            <a th:href="@{/undoneTasks}">Невыполненные</a>
+            <a th:href="@{/tasks/all}">Все задачи</a>
+            <a th:href="@{/tasks/done}">Выполненные</a>
+            <a th:href="@{/tasks/undone}">Невыполненные</a>
         </b>
     </div>
-    <div class="h3" align="center">
-        <p>Невыполненные задачи</p>
+    <div class="h3" align="center" th:switch="${statusTasks}">
+        <p th:case="'all'">Все задачи</p>
+        <p th:case="'done'">Выполненные задачи</p>
+        <p th:case="'undone'">Невыполненные задачи</p>
     </div>
     <div class="row">
         <table class="table">
             <thead>
             <tr>
                 <th scope="col">id</th>
+                <th scope="col">Название</th>
                 <th scope="col">Описание</th>
                 <th scope="col">Дата создания</th>
                 <th scope="col">Выполнено</th>
@@ -53,10 +56,11 @@
             <tr th:each="task:${tasks}">
                 <td th:text="${task.id}"></td>
                 <td>
-                    <a th:href="@{|/task/${task.id}|}">
-                        <i th:text="${task.description}"></i>
+                    <a th:href="@{|/tasks/task/${task.id}|}">
+                        <i th:text="${task.title}"></i>
                     </a>
                 </td>
+                <td th:text="${task.description}"></td>
                 <td th:text="${#temporals.format(task.created)}"></td>
                 <td th:if="${task.done}">
                     <i class="fa fa-check-square-o"></i>
@@ -80,8 +84,12 @@
                         <span aria-hidden="true">X</span>
                     </button>
                 </div>
-                <form th:action="@{/addTask}" method="post" enctype="multipart/form-data">
+                <form th:action="@{/tasks/add}" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
+                        <div class="form-group">
+                            <label for="description">Название</label>
+                            <input type="text" class="form-control" name="title" id="title" required>
+                        </div>
                         <div class="form-group">
                             <label for="description">Description</label>
                             <input type="text" class="form-control" name="description" id="description">

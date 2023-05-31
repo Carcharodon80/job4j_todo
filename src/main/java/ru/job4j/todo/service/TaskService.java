@@ -21,7 +21,7 @@ public interface TaskService {
 
     Task findTaskById(int id);
 
-    boolean changeStatusOfTask(int id);
+    boolean changeStatusOfTask(int id, boolean done);
 
-    boolean updateDescription(int id, String newDescription);
+    boolean updateTask(int id, String newTitle, String newDescription);
 }

@@ -31,9 +31,9 @@
     </nav>
     <div align="right">
         <b>
-            <a th:href="@{/allTasks}">Все задачи</a>
-            <a th:href="@{/doneTasks}">Выполненные</a>
-            <a th:href="@{/undoneTasks}">Невыполненные</a>
+            <a th:href="@{/tasks/all}">Все задачи</a>
+            <a th:href="@{/tasks/done}">Выполненные</a>
+            <a th:href="@{/tasks/undone}">Невыполненные</a>
         </b>
     </div>
     <div class="h3" align="center">
@@ -41,11 +41,19 @@
         <a th:text="${task.id}"></a>
     </div>
     <div>
-        <p style="border:1px solid;" th:text="${task.description}"></p>
+        <div class="form-group">
+            <label for="title">Название</label>
+            <textarea class="form-control" readonly name="newTitle" id="title"
+                  th:text="${task.title}"></textarea>
+            <label for="description">Описание</label>
+            <textarea class="form-control" readonly name="newDescription" id="description"
+                  th:text="${task.description}"></textarea>
+        </div>
     </div>
     <div style="display: inline-flex; float: right">
-        <form th:action="@{/changeStatusTask}" th:metod="get">
+        <form th:action="@{/tasks/changeStatus}" th:metod="get">
             <input name="id" type="hidden" th:value="${task.id}">
+            <input name="done" type="hidden" th:value="${task.done}">
             <div th:switch="${task.done}">
                 <a th:case="true">
                     <input class="btn btn-primary" type="submit" value="Вернуть в работу">
@@ -56,7 +64,7 @@
             </div>
         </form>
         <input class="btn btn-primary" data-toggle="modal" data-target="#edit" value="Редактировать">
-        <form th:action="@{/deleteTask}" th:method="post">
+        <form th:action="@{/tasks/delete}" th:method="post">
             <input name="id" type="hidden" th:value="${task.id}">
             <input class="btn btn-primary" type="submit" value="Удалить">
         </form>
@@ -70,10 +78,13 @@
                         <span aria-hidden="true">X</span>
                     </button>
                 </div>
-                <form th:action="@{/updateDescription}" method="post" enctype="multipart/form-data">
+                <form th:action="@{/tasks/update}" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
                         <input name="id" type="hidden" th:value="${task.id}">
                         <div class="form-group">
+                            <label for="newTitle">Название</label>
+                            <input type="text" class="form-control" name="newTitle" id="newTitle"
+                                   th:value="${task.title}" required>
                             <label for="newDescription">Описание</label>
                             <input type="text" class="form-control" name="newDescription" id="newDescription"
                                    th:value="${task.description}">

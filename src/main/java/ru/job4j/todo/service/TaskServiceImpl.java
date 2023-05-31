@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.repository.TaskRepository;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -31,40 +30,33 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> findAllTasks() {
-        List<Task> tasks = taskRepository.findAllTasks();
-        tasks.sort(Comparator.comparingInt(Task::getId));
-        return tasks;
+        return taskRepository.findAllTasks();
     }
 
     @Override
     public List<Task> findDoneTasks() {
-        List<Task> tasks = taskRepository.findDoneTasks();
-        tasks.sort(Comparator.comparingInt(Task::getId));
-        return tasks;
+        return taskRepository.findDoneTasks();
     }
 
     @Override
     public List<Task> findUndoneTasks() {
-        List<Task> tasks = taskRepository.findUndoneTasks();
-        tasks.sort(Comparator.comparingInt(Task::getId));
-        return tasks;
+        return taskRepository.findUndoneTasks();
     }
 
     @Override
     public Task findTaskById(int id) {
-        return taskRepository.findTaskById(id);
+        return taskRepository.findTaskById(id).get();
     }
 
     @Override
-    public boolean changeStatusOfTask(int id) {
-        Task task = taskRepository.findTaskById(id);
-        task.setDone(!task.getDone());
-        return taskRepository.updateTask(task);
+    public boolean changeStatusOfTask(int id, boolean done) {
+        return taskRepository.changeStatusOfTask(id, done);
     }
 
     @Override
-    public boolean updateDescription(int id, String newDescription) {
-        Task task = taskRepository.findTaskById(id);
+    public boolean updateTask(int id, String newTitle, String newDescription) {
+        Task task = taskRepository.findTaskById(id).get();
+        task.setTitle(newTitle);
         task.setDescription(newDescription);
         return taskRepository.updateTask(task);
     }
