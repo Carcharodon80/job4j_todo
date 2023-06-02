@@ -15,7 +15,6 @@ import java.util.List;
 public class TaskController {
     private final TaskService taskService;
 
-
     @GetMapping("/all")
     public String showAllTasks(Model model) {
         List<Task> taskList = taskService.findAllTasks();
@@ -52,7 +51,7 @@ public class TaskController {
         Task task = taskService.findTaskById(id);
         if (task != null) {
             model.addAttribute("task", task);
-            result =  "task/task";
+            result = "task/task";
         } else {
             model.addAttribute("message", "заданная задача не найдена.");
             result = "errors/error";
@@ -76,18 +75,17 @@ public class TaskController {
     public String changeStatusOfTask(@RequestParam int id, @RequestParam boolean done, Model model) {
         String result = "";
         if (taskService.changeStatusOfTask(id, done)) {
-            result =  "redirect:all";
+            result = "redirect:all";
         } else {
             model.addAttribute("message", "смена статуса задачи в данный момент невозможна.");
-            result =  "errors/error";
+            result = "errors/error";
         }
         return result;
     }
 
-    //TODO сделать как в методе выше???
     @PostMapping("/update")
     public String updateTask(@RequestParam int id, @RequestParam String newTitle,
-                                    @RequestParam String newDescription, Model model) {
+                             @RequestParam String newDescription, Model model) {
         String result = "";
         if (taskService.updateTask(id, newTitle, newDescription)) {
             model.addAttribute("task", taskService.findTaskById(id));
