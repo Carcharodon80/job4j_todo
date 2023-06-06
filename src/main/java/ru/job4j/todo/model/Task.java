@@ -19,5 +19,5 @@ public class Task {
     private String title;
     private String description;
     private LocalDateTime created = LocalDateTime.now().withNano(0);
-    private boolean done = false;
+    private boolean done;
 }

@@ -17,6 +17,7 @@ public class TaskRepository {
     private static final String FIND_ALL = "FROM Task ORDER BY id";
     private static final String FIND_DONE = "FROM Task WHERE done = true ORDER BY id ";
     private static final String FIND_UNDONE = "FROM Task WHERE done = false ORDER BY id";
+    private static final String DELETE  = "DELETE Task WHERE id = :id";
 
     public List<Task> findAllTasks() {
         return findTasks(FIND_ALL);
@@ -76,12 +77,10 @@ public class TaskRepository {
 
     public boolean deleteTask(int id) {
         Session session = sf.openSession();
-        Task task = new Task();
-        task.setId(id);
         boolean result = false;
         try {
             session.beginTransaction();
-            session.delete(task);
+            session.createQuery(DELETE).setParameter("id", id).executeUpdate();
             session.getTransaction().commit();
             result = true;
         } catch (Exception e) {

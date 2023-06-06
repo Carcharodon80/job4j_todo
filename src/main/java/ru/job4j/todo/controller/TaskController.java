@@ -47,53 +47,45 @@ public class TaskController {
 
     @GetMapping("/task/{taskId}")
     public String showOneTask(Model model, @PathVariable("taskId") int id) {
-        String result = "";
         Task task = taskService.findTaskById(id);
         if (task != null) {
             model.addAttribute("task", task);
-            result = "task/task";
+            return "task/task";
         } else {
             model.addAttribute("message", "заданная задача не найдена.");
-            result = "errors/error";
+            return  "errors/error";
         }
-        return result;
     }
 
     @PostMapping("/delete")
     public String deleteTask(@RequestParam int id, Model model) {
-        String result = "";
         if (taskService.deleteTask(id)) {
-            result = "redirect:all";
+            return "redirect:all";
         } else {
             model.addAttribute("message", "удаление задачи в данный момент невозможно.");
-            result = "errors/error";
+            return "errors/error";
         }
-        return result;
     }
 
     @GetMapping("/changeStatus")
     public String changeStatusOfTask(@RequestParam int id, @RequestParam boolean done, Model model) {
-        String result = "";
         if (taskService.changeStatusOfTask(id, done)) {
-            result = "redirect:all";
+            return "redirect:all";
         } else {
             model.addAttribute("message", "смена статуса задачи в данный момент невозможна.");
-            result = "errors/error";
+            return "errors/error";
         }
-        return result;
     }
 
     @PostMapping("/update")
     public String updateTask(@RequestParam int id, @RequestParam String newTitle,
                              @RequestParam String newDescription, Model model) {
-        String result = "";
         if (taskService.updateTask(id, newTitle, newDescription)) {
             model.addAttribute("task", taskService.findTaskById(id));
-            result = "task/task";
+            return "task/task";
         } else {
             model.addAttribute("message", "редактирование задачи в данный момент невозможно.");
-            result = "errors/error";
+            return "errors/error";
         }
-        return result;
     }
 }
