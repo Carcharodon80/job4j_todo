@@ -15,28 +15,40 @@ import java.util.Optional;
 public class TaskRepository {
     private final SessionFactory sf;
     private static final String FIND_ALL = "FROM Task ORDER BY id";
-    private static final String FIND_DONE = "FROM Task WHERE done = true ORDER BY id ";
-    private static final String FIND_UNDONE = "FROM Task WHERE done = false ORDER BY id";
-    private static final String DELETE  = "DELETE Task WHERE id = :id";
+    private static final String FIND_SOME = "FROM Task WHERE done = :done ORDER BY id ";
+    private static final String DELETE = "DELETE Task WHERE id = :id";
 
     public List<Task> findAllTasks() {
-        return findTasks(FIND_ALL);
-    }
-
-    public List<Task> findDoneTasks() {
-        return findTasks(FIND_DONE);
-    }
-
-    public List<Task> findUndoneTasks() {
-        return findTasks(FIND_UNDONE);
-    }
-
-    private List<Task> findTasks(String query) {
         List<Task> tasks = new ArrayList<>();
         Session session = sf.openSession();
         try {
             session.beginTransaction();
-            tasks = session.createQuery(query, Task.class).list();
+            tasks = session.createQuery(FIND_ALL, Task.class).list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return tasks;
+    }
+
+    public List<Task> findDoneTasks() {
+        return findSomeTasks(true);
+    }
+
+    public List<Task> findUndoneTasks() {
+        return findSomeTasks(false);
+    }
+
+    private List<Task> findSomeTasks(boolean done) {
+        List<Task> tasks = new ArrayList<>();
+        Session session = sf.openSession();
+        try {
+            session.beginTransaction();
+            tasks = session.createQuery(FIND_SOME, Task.class)
+                    .setParameter("done", done)
+                    .list();
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();

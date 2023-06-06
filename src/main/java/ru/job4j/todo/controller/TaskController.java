@@ -51,30 +51,27 @@ public class TaskController {
         if (task != null) {
             model.addAttribute("task", task);
             return "task/task";
-        } else {
-            model.addAttribute("message", "заданная задача не найдена.");
-            return  "errors/error";
         }
+        model.addAttribute("message", "заданная задача не найдена.");
+        return "errors/error";
     }
 
     @PostMapping("/delete")
     public String deleteTask(@RequestParam int id, Model model) {
         if (taskService.deleteTask(id)) {
             return "redirect:all";
-        } else {
-            model.addAttribute("message", "удаление задачи в данный момент невозможно.");
-            return "errors/error";
         }
+        model.addAttribute("message", "удаление задачи в данный момент невозможно.");
+        return "errors/error";
     }
 
     @GetMapping("/changeStatus")
     public String changeStatusOfTask(@RequestParam int id, @RequestParam boolean done, Model model) {
         if (taskService.changeStatusOfTask(id, done)) {
             return "redirect:all";
-        } else {
-            model.addAttribute("message", "смена статуса задачи в данный момент невозможна.");
-            return "errors/error";
         }
+        model.addAttribute("message", "смена статуса задачи в данный момент невозможна.");
+        return "errors/error";
     }
 
     @PostMapping("/update")
@@ -83,9 +80,8 @@ public class TaskController {
         if (taskService.updateTask(id, newTitle, newDescription)) {
             model.addAttribute("task", taskService.findTaskById(id));
             return "task/task";
-        } else {
-            model.addAttribute("message", "редактирование задачи в данный момент невозможно.");
-            return "errors/error";
         }
+        model.addAttribute("message", "редактирование задачи в данный момент невозможно.");
+        return "errors/error";
     }
 }
