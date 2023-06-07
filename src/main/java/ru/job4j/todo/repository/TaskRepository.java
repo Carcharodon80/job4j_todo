@@ -33,15 +33,7 @@ public class TaskRepository {
         return tasks;
     }
 
-    public List<Task> findDoneTasks() {
-        return findSomeTasks(true);
-    }
-
-    public List<Task> findUndoneTasks() {
-        return findSomeTasks(false);
-    }
-
-    private List<Task> findSomeTasks(boolean done) {
+    public List<Task> findDoneTasks(boolean done) {
         List<Task> tasks = new ArrayList<>();
         Session session = sf.openSession();
         try {
