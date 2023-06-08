@@ -13,20 +13,20 @@ import java.util.Optional;
 public class UserRepository {
     private final SessionFactory sf;
 
-    public Optional<User> addUser(User user) {
-        Optional<User> optional = Optional.empty();
+    public boolean addUser(User user) {
+        boolean result = false;
         Session session = sf.openSession();
         try {
             session.beginTransaction();
             session.save(user);
             session.getTransaction().commit();
-            optional = Optional.of(user);
+            result = true;
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
-        return optional;
+        return result;
     }
 
     public Optional<User> findUserByLoginAndPassword(String login, String password) {
@@ -48,6 +48,4 @@ public class UserRepository {
         }
         return optional;
     }
-
-    //TODO создать форму регистрации пользователя и контроллер, сервис добавления пользователя
 }
