@@ -5,20 +5,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.UserService;
 
 @Controller
 @AllArgsConstructor
+@RequestMapping("/users/")
 public class UserController {
-    @PostMapping("/user/addUser")
-    //Todo добавить ссылку регистрация, при нажатии идет страница регистрации, реализовать добавление пользователя
-    //todo почитать про bootstrap navbar
+    private final UserService userService;
+
+    @PostMapping("/add")
     public String addUser(@ModelAttribute User user) {
-        return "redirect:/task/tasks";
+        userService.addUser(user);
+        return "redirect:/tasks/all";
     }
 
-    @GetMapping("/user/addUser")
+    @GetMapping("/registration")
     public String login() {
-        return "redirect:/user/addUser";
+        return "user/registration";
     }
+
+    //todo добавить вход, выход, аутентификацию
 }
