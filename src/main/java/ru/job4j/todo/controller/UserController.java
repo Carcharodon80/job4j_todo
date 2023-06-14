@@ -2,6 +2,7 @@ package ru.job4j.todo.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,22 +10,54 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Optional;
+
 @Controller
 @AllArgsConstructor
 @RequestMapping("/users/")
 public class UserController {
     private final UserService userService;
 
+    @GetMapping("/registration")
+    public String getRegistrationPage() {
+        return "user/registration";
+    }
+
     @PostMapping("/add")
-    public String addUser(@ModelAttribute User user) {
+    public String registration(@ModelAttribute User user) {
         userService.addUser(user);
         return "redirect:/tasks/all";
     }
 
-    @GetMapping("/registration")
-    public String login() {
-        return "user/registration";
+    @GetMapping("/login")
+    public String getLoginPage() {
+        return "user/login";
     }
 
-    //todo добавить вход, выход, аутентификацию
+    @PostMapping("/login")
+    public String login(@ModelAttribute User user, Model model, HttpServletRequest request) {
+        Optional<User> userOptional = userService.findUser(user.getLogin(), user.getPassword());
+        if (userOptional.isEmpty()) {
+            model.addAttribute("error", "Пользователь с таким логином и паролем не найден.");
+            return "user/login";
+        }
+        HttpSession session = request.getSession();
+        session.setAttribute("user", userOptional.get());
+        return "redirect:/tasks/all";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "user/login";
+    }
+
+
+    //todo добавить фильтр авторизации
+    //todo вынести получение пользователя из сессии в утилитный класс
+    //todo контроллер - это утилитный класс? (см. https://job4j.ru/profile/exercise/188/task-view/944)
+    //todo улучшить навигацию по страницам
+
 }

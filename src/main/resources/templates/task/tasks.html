@@ -24,7 +24,8 @@
 <div class="container">
     <nav class="navbar navbar-light bg-light justify-content-beetwen">
         <a class="navbar-brand" href="#">To do</a>
-        <a class="my-2 my-sm-0" th:href="@{/users/registration}">Регистрация</a>
+        <p class="my-2 my-sm-0" th:text="${user.name}"></p>
+        <a class="my-2 my-sm-0" th:href="@{/users/logout}">Выйти</a>
     </nav>
 
 <div align="right">

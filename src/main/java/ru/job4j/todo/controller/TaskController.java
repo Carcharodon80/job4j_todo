@@ -5,8 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -16,10 +18,12 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping("/all")
-    public String showAllTasks(Model model) {
+    public String showAllTasks(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
         List<Task> taskList = taskService.findAllTasks();
         model.addAttribute("tasks", taskList);
         model.addAttribute("statusTasks", "all");
+        model.addAttribute("user", user);
         return "task/tasks";
     }
 

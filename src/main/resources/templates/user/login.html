@@ -24,19 +24,23 @@
 <div class="container">
     <div class="row pt-3">
         <div class="card" style="width: 100%">
-            <div class="card-header">Регистрация</div>
+            <div class="mb-3" th:if="${error}">
+                <p class="text-danger" th:text="${error}"></p>
+            </div>
+            <div class="card-header">
+                <p>Для входа введите логин и пароль, или
+                    <a th:href="@{/users/registration}">зарегистрируйтесь.</a></p>
+            </div>
             <div class="card-body">
-                <form th:action="@{/users/add}" method="post" enctype="multipart/form-data">
+                <form th:action="@{/users/login}" method="post" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="name">Имя</label>
-                        <input type="text" class="form-control" id="name" name="name">
                         <label for="login">Логин</label>
                         <input type="text" class="form-control" id="login" name="login">
                         <label for="password">Пароль</label>
                         <input type="password" class="form-control" id="password" name="password">
                     </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Зарегистрировать</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Войти</button>
                 </form>
             </div>
         </div>
