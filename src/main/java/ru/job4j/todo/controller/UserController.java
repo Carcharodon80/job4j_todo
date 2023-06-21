@@ -51,13 +51,12 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "user/login";
+        return "redirect:/tasks/all";
     }
 
 
-    //todo добавить фильтр авторизации
-    //todo вынести получение пользователя из сессии в утилитный класс
     //todo контроллер - это утилитный класс? (см. https://job4j.ru/profile/exercise/188/task-view/944)
     //todo улучшить навигацию по страницам
+    //todo ошибка при обновлении задачи
 
 }

@@ -22,12 +22,17 @@
 </head>
 <body>
 <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-light bg-light justify-content-beetwen">
         <a class="navbar-brand" href="#">To do</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <a class="my-2 my-sm-0" th:text="'Добро пожаловать, ' + ${user.name}"></a>
+        <a th:switch="${user.name}">
+            <a th:case="Гость">
+                <a class="my-2 my-sm-0" th:href="@{/users/login}">Вход</a>
+            </a>
+            <a th:case="*">
+                <a class="my-2 my-sm-0" th:href="@{/users/logout}">Выйти</a>
+            </a>
+        </a>
     </nav>
     <div align="right">
         <b>

@@ -5,8 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
-import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
+import ru.job4j.todo.util.UtilUser;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -19,27 +19,28 @@ public class TaskController {
 
     @GetMapping("/all")
     public String showAllTasks(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
         List<Task> taskList = taskService.findAllTasks();
         model.addAttribute("tasks", taskList);
         model.addAttribute("statusTasks", "all");
-        model.addAttribute("user", user);
+        model.addAttribute(UtilUser.getUserFromSession(session));
         return "task/tasks";
     }
 
     @GetMapping("/done")
-    public String showDoneTasks(Model model) {
+    public String showDoneTasks(Model model, HttpSession session) {
         List<Task> taskList = taskService.findDoneTasks();
         model.addAttribute("tasks", taskList);
         model.addAttribute("statusTasks", "done");
+        model.addAttribute(UtilUser.getUserFromSession(session));
         return "task/tasks";
     }
 
     @GetMapping("/undone")
-    public String showUndoneTasks(Model model) {
+    public String showUndoneTasks(Model model, HttpSession session) {
         List<Task> taskList = taskService.findUndoneTasks();
         model.addAttribute("tasks", taskList);
         model.addAttribute("statusTasks", "undone");
+        model.addAttribute(UtilUser.getUserFromSession(session));
         return "task/tasks";
     }
 
@@ -50,10 +51,11 @@ public class TaskController {
     }
 
     @GetMapping("/task/{taskId}")
-    public String showOneTask(Model model, @PathVariable("taskId") int id) {
+    public String showOneTask(HttpSession session, Model model, @PathVariable("taskId") int id) {
         Task task = taskService.findTaskById(id);
         if (task != null) {
             model.addAttribute("task", task);
+            model.addAttribute(UtilUser.getUserFromSession(session));
             return "task/task";
         }
         model.addAttribute("message", "заданная задача не найдена.");
@@ -79,11 +81,12 @@ public class TaskController {
     }
 
     @PostMapping("/update")
-    public String updateTask(@RequestParam int id, @RequestParam String newTitle,
+    public String updateTask(HttpSession session, @RequestParam int id, @RequestParam String newTitle,
                              @RequestParam String newDescription, Model model) {
         if (taskService.updateTask(id, newTitle, newDescription)) {
             model.addAttribute("task", taskService.findTaskById(id));
-            return "task/task";
+            model.addAttribute(UtilUser.getUserFromSession(session));
+            return "tasks/task";
         }
         model.addAttribute("message", "редактирование задачи в данный момент невозможно.");
         return "errors/error";
