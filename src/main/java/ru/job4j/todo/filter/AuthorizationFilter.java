@@ -15,6 +15,7 @@ import java.util.Set;
 @Order(1)
 public class AuthorizationFilter extends HttpFilter {
     private static final Set<String> MAPPINGS = Set.of("login", "registration", "all", "done", "undone");
+
     @Override
     protected void doFilter(HttpServletRequest request,
                             HttpServletResponse response,

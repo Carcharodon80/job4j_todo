@@ -25,10 +25,15 @@ public class UserController {
         return "user/registration";
     }
 
-    @PostMapping("/add")
-    public String registration(@ModelAttribute User user) {
-        userService.addUser(user);
-        return "redirect:/tasks/all";
+    @PostMapping("/registration")
+    public String registration(@ModelAttribute User user, Model model) {
+        boolean isAddedUser = userService.addUser(user);
+        if (!isAddedUser) {
+            model.addAttribute("message",
+                    "пользователь с таким именем или логином уже существует");
+            return "errors/error";
+        }
+        return "redirect:/users/login";
     }
 
     @GetMapping("/login")
@@ -53,10 +58,4 @@ public class UserController {
         session.invalidate();
         return "redirect:/tasks/all";
     }
-
-
-    //todo контроллер - это утилитный класс? (см. https://job4j.ru/profile/exercise/188/task-view/944)
-    //todo улучшить навигацию по страницам
-    //todo ошибка при обновлении задачи
-
 }

@@ -24,11 +24,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public boolean updateTask(int id) {
-        return false;
-    }
-
-    @Override
     public List<Task> findAllTasks() {
         return taskRepository.findAllTasks();
     }

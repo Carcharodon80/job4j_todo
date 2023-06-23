@@ -86,7 +86,7 @@ public class TaskController {
         if (taskService.updateTask(id, newTitle, newDescription)) {
             model.addAttribute("task", taskService.findTaskById(id));
             model.addAttribute(UtilUser.getUserFromSession(session));
-            return "tasks/task";
+            return "task/task";
         }
         model.addAttribute("message", "редактирование задачи в данный момент невозможно.");
         return "errors/error";

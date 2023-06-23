@@ -34,13 +34,13 @@ public class UserRepository {
         Session session = sf.openSession();
         try {
             session.beginTransaction();
-            User user = session.createQuery("from User where login = :login " +
-                            "and password = :password", User.class)
+            User user = session.createQuery("from User where login = :login "
+                            + "and password = :password", User.class)
                     .setParameter("login", login)
                     .setParameter("password", password)
                     .getSingleResult();
             session.getTransaction().commit();
-            optional = optional.of(user);
+            optional = Optional.of(user);
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
