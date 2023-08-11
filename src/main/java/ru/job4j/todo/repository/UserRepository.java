@@ -1,51 +1,30 @@
 package ru.job4j.todo.repository;
 
 import lombok.AllArgsConstructor;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.User;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 public class UserRepository {
-    private final SessionFactory sf;
+    private final CrudRepository crudRepository;
+    private static final String FIND_USER = "FROM User WHERE login = :login AND password = :password";
 
     public boolean addUser(User user) {
-        boolean result = false;
-        Session session = sf.openSession();
+        boolean rsl = false;
         try {
-            session.beginTransaction();
-            session.save(user);
-            session.getTransaction().commit();
-            result = true;
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
+            crudRepository.run(session -> session.persist(user));
+            rsl = true;
+        } catch (HibernateException ignored) {
         }
-        return result;
+        return rsl;
     }
 
     public Optional<User> findUserByLoginAndPassword(String login, String password) {
-        Optional<User> optional = Optional.empty();
-        Session session = sf.openSession();
-        try {
-            session.beginTransaction();
-            User user = session.createQuery("from User where login = :login "
-                            + "and password = :password", User.class)
-                    .setParameter("login", login)
-                    .setParameter("password", password)
-                    .getSingleResult();
-            session.getTransaction().commit();
-            optional = Optional.of(user);
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return optional;
+        return crudRepository.optional(FIND_USER, User.class, Map.of("login", login, "password", password));
     }
 }
