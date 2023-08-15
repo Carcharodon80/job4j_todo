@@ -1,7 +1,8 @@
 package ru.job4j.todo.repository;
 
 import lombok.AllArgsConstructor;
-import org.hibernate.HibernateException;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
 
@@ -17,6 +18,7 @@ public class TaskRepository {
     private static final String FIND_SOME = "FROM Task WHERE done = :done ORDER BY id";
     private static final String DELETE = "DELETE Task WHERE id = :id";
     private static final String CHANGE_STATUS = "UPDATE Task SET done = :done WHERE id = :id";
+    private static final Logger LOGGER = LogManager.getLogger(TaskRepository.class.getName());
 
     public List<Task> findAllTasks() {
         return crudRepository.query(FIND_ALL, Task.class);
@@ -39,7 +41,8 @@ public class TaskRepository {
         try {
             crudRepository.run(DELETE, Map.of("id", id));
             rsl = true;
-        } catch (HibernateException ignored) {
+        } catch (Exception e) {
+            LOGGER.error("___Exception___", e);
         }
         return rsl;
     }
@@ -49,7 +52,8 @@ public class TaskRepository {
         try {
             crudRepository.run(session -> session.merge(task));
             rsl = true;
-        } catch (HibernateException ignored) {
+        } catch (Exception e) {
+            LOGGER.error("___Exception___", e);
         }
         return rsl;
     }
@@ -59,7 +63,8 @@ public class TaskRepository {
         try {
             crudRepository.run(CHANGE_STATUS, Map.of("id", id, "done", !done));
             rsl = true;
-        } catch (HibernateException ignored) {
+        } catch (Exception e) {
+            LOGGER.error("___Exception___", e);
         }
         return rsl;
     }
