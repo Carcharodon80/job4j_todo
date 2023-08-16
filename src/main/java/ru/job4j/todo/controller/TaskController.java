@@ -50,7 +50,7 @@ public class TaskController {
             taskService.addTask(task);
             return "redirect:all";
         } catch (Exception e) {
-            model.addAttribute("message", "добавление задачи в данный момент невозможно.");
+            model.addAttribute("message", "добавление задачи в данный момент невозможно");
             return "errors/error";
         }
     }
