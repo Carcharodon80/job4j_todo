@@ -43,9 +43,9 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public String addTask(Model model, @ModelAttribute Task task, @RequestParam int user_id) {
+    public String addTask(Model model, @ModelAttribute Task task, @RequestParam int userId) {
         try {
-            User user = userService.findUserById(user_id).get();
+            User user = userService.findUserById(userId).get();
             task.setUser(user);
             taskService.addTask(task);
             return "redirect:all";
