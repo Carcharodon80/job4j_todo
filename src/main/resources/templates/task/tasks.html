@@ -54,6 +54,7 @@
                 <th scope="col">Название</th>
                 <th scope="col">Описание</th>
                 <th scope="col">Дата создания</th>
+                <th scope="col">Пользователь</th>
                 <th scope="col">Выполнено</th>
             </tr>
             </thead>
@@ -67,6 +68,7 @@
                 </td>
                 <td th:text="${task.description}"></td>
                 <td th:text="${#temporals.format(task.created)}"></td>
+                <td th:text="${task.user.name}"></td>
                 <td th:if="${task.done}">
                     <i class="fa fa-check-square-o"></i>
                 </td>
@@ -103,6 +105,7 @@
                             <input type="text" class="form-control" name="description" id="description">
                         </div>
                     </div>
+                    <input type="hidden" th:value="${user.id}" name="user_id">
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Add new task

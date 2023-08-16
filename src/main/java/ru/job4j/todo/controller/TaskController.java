@@ -5,7 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
+import ru.job4j.todo.service.UserService;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
 @RequestMapping("/tasks")
 public class TaskController {
     private final TaskService taskService;
+    private final UserService userService;
 
     @GetMapping("/all")
     public String showAllTasks(Model model) {
@@ -40,9 +43,16 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public String addTask(@ModelAttribute Task task) {
-        taskService.addTask(task);
-        return "redirect:all";
+    public String addTask(Model model, @ModelAttribute Task task, @RequestParam int user_id) {
+        try {
+            User user = userService.findUserById(user_id).get();
+            task.setUser(user);
+            taskService.addTask(task);
+            return "redirect:all";
+        } catch (Exception e) {
+            model.addAttribute("message", "добавление задачи в данный момент невозможно.");
+            return "errors/error";
+        }
     }
 
     @GetMapping("/task/{taskId}")

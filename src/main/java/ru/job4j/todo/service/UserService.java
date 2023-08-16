@@ -10,4 +10,6 @@ public interface UserService {
     boolean addUser(User user);
 
     Optional<User> findUser(String login, String password);
+
+    Optional<User> findUserById(int id);
 }

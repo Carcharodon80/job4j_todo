@@ -13,7 +13,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserRepository {
     private final CrudRepository crudRepository;
-    private static final String FIND_USER = "FROM User WHERE login = :login AND password = :password";
+    private static final String FIND_USER_BY_LOGIN_PASSWORD = "FROM User WHERE login = :login AND password = :password";
+    private static final String FIND_USER_BY_ID = "FROM User WHERE id = :id";
     private static final Logger LOGGER = LogManager.getLogger(UserRepository.class);
 
     public boolean addUser(User user) {
@@ -28,6 +29,11 @@ public class UserRepository {
     }
 
     public Optional<User> findUserByLoginAndPassword(String login, String password) {
-        return crudRepository.optional(FIND_USER, User.class, Map.of("login", login, "password", password));
+        return crudRepository.optional(
+                FIND_USER_BY_LOGIN_PASSWORD, User.class, Map.of("login", login, "password", password));
+    }
+
+    public Optional<User> findUserById(int id) {
+        return crudRepository.optional(FIND_USER_BY_ID, User.class, Map.of("id", id));
     }
 }
