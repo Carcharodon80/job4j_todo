@@ -1,1 +1,1 @@
-ALTER TABLE tasks ADD user_id int REFERENCES todo_user(id) DEFAULT 1;
+ALTER TABLE tasks ADD user_id int REFERENCES todo_user(id);
