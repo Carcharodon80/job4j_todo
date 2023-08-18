@@ -9,6 +9,7 @@ import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
 import ru.job4j.todo.service.UserService;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -43,9 +44,9 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public String addTask(Model model, @ModelAttribute Task task, @RequestParam int userId) {
+    public String addTask(Model model, @ModelAttribute Task task, HttpSession session) {
         try {
-            User user = userService.findUserById(userId).get();
+            User user = (User) session.getAttribute("user");
             task.setUser(user);
             taskService.addTask(task);
             return "redirect:all";
