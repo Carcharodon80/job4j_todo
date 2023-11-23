@@ -11,3 +11,5 @@ public class Main {
         System.out.println("Go to http://localhost:8080/tasks/all");
     }
 }
+
+//todo добавить приоритет при создании задачи

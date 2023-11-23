@@ -14,8 +14,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class TaskRepository {
     private final CrudRepository crudRepository;
-    private static final String FIND_ALL = "FROM Task ORDER BY id";
-    private static final String FIND_SOME = "FROM Task WHERE done = :done ORDER BY id";
+    private static final String FIND_ALL = "FROM Task t JOIN FETCH t.priority ORDER BY t.id";
+    private static final String FIND_SOME = "FROM Task t JOIN FETCH t.priority WHERE done = :done ORDER BY t.id";
     private static final String DELETE = "DELETE Task WHERE id = :id";
     private static final String CHANGE_STATUS = "UPDATE Task SET done = :done WHERE id = :id";
     private static final Logger LOGGER = LogManager.getLogger(TaskRepository.class.getName());
