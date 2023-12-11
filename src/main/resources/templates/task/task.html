@@ -49,10 +49,13 @@
         <div class="form-group">
             <label for="title">Название</label>
             <textarea class="form-control" readonly name="newTitle" id="title"
-                  th:text="${task.title}"></textarea>
+                      th:text="${task.title}"></textarea>
             <label for="description">Описание</label>
             <textarea class="form-control" readonly name="newDescription" id="description"
-                  th:text="${task.description}"></textarea>
+                      th:text="${task.description}"></textarea>
+            <label for="priority">Приоритет</label>
+            <textarea class="form-control" readonly name="newPriority" id="priority"
+                      th:text="${task.priority.name}"></textarea>
         </div>
     </div>
     <div style="display: inline-flex; float: right">

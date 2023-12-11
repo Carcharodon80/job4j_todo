@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 import ru.job4j.todo.service.UserService;
 
@@ -18,11 +20,13 @@ import java.util.List;
 public class TaskController {
     private final TaskService taskService;
     private final UserService userService;
+    private final PriorityService priorityService;
 
     @GetMapping("/all")
     public String showAllTasks(Model model) {
         List<Task> taskList = taskService.findAllTasks();
         model.addAttribute("tasks", taskList);
+        model.addAttribute("priorities", priorityService.findAllPriorities());
         model.addAttribute("statusTasks", "all");
         return "task/tasks";
     }
@@ -31,6 +35,7 @@ public class TaskController {
     public String showDoneTasks(Model model) {
         List<Task> taskList = taskService.findDoneTasks();
         model.addAttribute("tasks", taskList);
+        model.addAttribute("priorities", priorityService.findAllPriorities());
         model.addAttribute("statusTasks", "done");
         return "task/tasks";
     }
@@ -39,6 +44,7 @@ public class TaskController {
     public String showUndoneTasks(Model model) {
         List<Task> taskList = taskService.findUndoneTasks();
         model.addAttribute("tasks", taskList);
+        model.addAttribute("priorities", priorityService.findAllPriorities());
         model.addAttribute("statusTasks", "undone");
         return "task/tasks";
     }
@@ -48,6 +54,8 @@ public class TaskController {
         try {
             User user = (User) session.getAttribute("user");
             task.setUser(user);
+            Priority priority = priorityService.findPriorityById(task.getPriority().getId());
+            task.setPriority(priority);
             taskService.addTask(task);
             return "redirect:all";
         } catch (Exception e) {
@@ -61,6 +69,7 @@ public class TaskController {
         Task task = taskService.findTaskById(id);
         if (task != null) {
             model.addAttribute("task", task);
+            model.addAttribute("priorities", priorityService.findAllPriorities());
             return "task/task";
         }
         model.addAttribute("message", "заданная задача не найдена.");

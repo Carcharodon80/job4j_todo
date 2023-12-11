@@ -91,7 +91,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add task</h5>
-
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">X</span>
                     </button>
@@ -105,6 +104,15 @@
                         <div class="form-group">
                             <label for="description">Описание</label>
                             <input type="text" class="form-control" name="description" id="description">
+                        </div>
+                        <div class="form-group">
+                            <label for="priority">Приоритет</label>
+                            <select class="form-control" id="priority" name="priority.id">
+                                <option th:each="priority : ${priorities}"
+                                        th:value="${priority.id}"
+                                        th:text="${priority.name}"
+                                ></option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">

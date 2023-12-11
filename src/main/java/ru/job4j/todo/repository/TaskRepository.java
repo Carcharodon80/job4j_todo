@@ -18,6 +18,7 @@ public class TaskRepository {
     private static final String FIND_SOME = "FROM Task t JOIN FETCH t.priority WHERE done = :done ORDER BY t.id";
     private static final String DELETE = "DELETE Task WHERE id = :id";
     private static final String CHANGE_STATUS = "UPDATE Task SET done = :done WHERE id = :id";
+    private static final String FIND_TASK_BY_ID = "FROM Task t JOIN FETCH t.priority WHERE t.id = :id";
     private static final Logger LOGGER = LogManager.getLogger(TaskRepository.class.getName());
 
     public List<Task> findAllTasks() {
@@ -33,7 +34,7 @@ public class TaskRepository {
     }
 
     public Optional<Task> findTaskById(int id) {
-        return crudRepository.optional(id, Task.class);
+        return crudRepository.optional(FIND_TASK_BY_ID, Task.class, Map.of("id", id));
     }
 
     public boolean deleteTask(int id) {
