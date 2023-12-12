@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
-import ru.job4j.todo.service.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -19,7 +17,6 @@ import java.util.List;
 @RequestMapping("/tasks")
 public class TaskController {
     private final TaskService taskService;
-    private final UserService userService;
     private final PriorityService priorityService;
 
     @GetMapping("/all")
@@ -54,8 +51,6 @@ public class TaskController {
         try {
             User user = (User) session.getAttribute("user");
             task.setUser(user);
-            Priority priority = priorityService.findPriorityById(task.getPriority().getId());
-            task.setPriority(priority);
             taskService.addTask(task);
             return "redirect:all";
         } catch (Exception e) {
