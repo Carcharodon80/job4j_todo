@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
@@ -18,12 +20,14 @@ import java.util.List;
 public class TaskController {
     private final TaskService taskService;
     private final PriorityService priorityService;
+    private final CategoryService categoryService;
 
     @GetMapping("/all")
     public String showAllTasks(Model model) {
         List<Task> taskList = taskService.findAllTasks();
         model.addAttribute("tasks", taskList);
         model.addAttribute("priorities", priorityService.findAllPriorities());
+        model.addAttribute("categories", categoryService.findAllCategories());
         model.addAttribute("statusTasks", "all");
         return "task/tasks";
     }
@@ -33,6 +37,7 @@ public class TaskController {
         List<Task> taskList = taskService.findDoneTasks();
         model.addAttribute("tasks", taskList);
         model.addAttribute("priorities", priorityService.findAllPriorities());
+        model.addAttribute("categories", categoryService.findAllCategories());
         model.addAttribute("statusTasks", "done");
         return "task/tasks";
     }
@@ -42,15 +47,21 @@ public class TaskController {
         List<Task> taskList = taskService.findUndoneTasks();
         model.addAttribute("tasks", taskList);
         model.addAttribute("priorities", priorityService.findAllPriorities());
+        model.addAttribute("categories", categoryService.findAllCategories());
         model.addAttribute("statusTasks", "undone");
         return "task/tasks";
     }
 
     @PostMapping("/add")
-    public String addTask(Model model, @ModelAttribute Task task, HttpSession session) {
+    public String addTask(Model model,
+                          @RequestParam List<Integer> categories_id,
+                          @ModelAttribute Task task,
+                          HttpSession session) {
         try {
             User user = (User) session.getAttribute("user");
             task.setUser(user);
+            List<Category> categories = categoryService.findCategoriesById(categories_id);
+            task.setCategories(categories);
             taskService.addTask(task);
             return "redirect:all";
         } catch (Exception e) {

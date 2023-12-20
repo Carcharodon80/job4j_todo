@@ -55,6 +55,7 @@
                 <th scope="col">Описание</th>
                 <th scope="col">Дата создания</th>
                 <th scope="col">Приоритет</th>
+                <th scope="col">Категория</th>
                 <th scope="col">Пользователь</th>
                 <th scope="col">Выполнено</th>
             </tr>
@@ -70,6 +71,15 @@
                 <td th:text="${task.description}"></td>
                 <td th:text="${#temporals.format(task.created)}"></td>
                 <td th:text="${task.priority.name}"></td>
+                <td>
+                    <table class="table">
+                        <tbody>
+                        <tr th:each="category:${task.categories}">
+                            <td th:text="${category.name}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
                 <td th:text="${task.user.name}"></td>
                 <td th:if="${task.done}">
                     <i class="fa fa-check-square-o"></i>
@@ -111,6 +121,15 @@
                                 <option th:each="priority : ${priorities}"
                                         th:value="${priority.id}"
                                         th:text="${priority.name}"
+                                ></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Категория</label>
+                            <select class="form-control" id="category" name="categories_id" multiple>
+                                <option th:each="category : ${categories}"
+                                        th:value="${category.id}"
+                                        th:text="${category.name}"
                                 ></option>
                             </select>
                         </div>

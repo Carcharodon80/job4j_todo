@@ -14,7 +14,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class TaskRepository {
     private final CrudRepository crudRepository;
-    private static final String FIND_ALL = "FROM Task t JOIN FETCH t.priority ORDER BY t.id";
+    private static final String FIND_ALL = "FROM Task t JOIN FETCH t.priority JOIN FETCH t.categories ORDER BY t.id";
     private static final String FIND_SOME = "FROM Task t JOIN FETCH t.priority WHERE done = :done ORDER BY t.id";
     private static final String DELETE = "DELETE Task WHERE id = :id";
     private static final String CHANGE_STATUS = "UPDATE Task SET done = :done WHERE id = :id";
@@ -30,7 +30,7 @@ public class TaskRepository {
     }
 
     public void addTask(Task task) {
-        crudRepository.run(session -> session.persist(task));
+        crudRepository.run(session -> session.merge(task));
     }
 
     public Optional<Task> findTaskById(int id) {
