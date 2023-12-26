@@ -54,13 +54,13 @@ public class TaskController {
 
     @PostMapping("/add")
     public String addTask(Model model,
-                          @RequestParam List<Integer> categories_id,
+                          @RequestParam List<Integer> categoriesId,
                           @ModelAttribute Task task,
                           HttpSession session) {
         try {
             User user = (User) session.getAttribute("user");
             task.setUser(user);
-            List<Category> categories = categoryService.findCategoriesById(categories_id);
+            List<Category> categories = categoryService.findCategoriesById(categoriesId);
             task.setCategories(categories);
             taskService.addTask(task);
             return "redirect:all";

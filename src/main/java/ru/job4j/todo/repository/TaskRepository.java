@@ -14,11 +14,14 @@ import java.util.Optional;
 @AllArgsConstructor
 public class TaskRepository {
     private final CrudRepository crudRepository;
-    private static final String FIND_ALL = "FROM Task t JOIN FETCH t.priority JOIN FETCH t.categories ORDER BY t.id";
-    private static final String FIND_SOME = "FROM Task t JOIN FETCH t.priority WHERE done = :done ORDER BY t.id";
+    private static final String FIND_ALL = "SELECT DISTINCT t FROM Task t "
+            + "JOIN FETCH t.priority JOIN FETCH t.categories ORDER BY t.id";
+    private static final String FIND_SOME = "SELECT DISTINCT t FROM Task t "
+            + "JOIN FETCH t.priority JOIN FETCH t.categories WHERE done = :done ORDER BY t.id";
     private static final String DELETE = "DELETE Task WHERE id = :id";
     private static final String CHANGE_STATUS = "UPDATE Task SET done = :done WHERE id = :id";
-    private static final String FIND_TASK_BY_ID = "FROM Task t JOIN FETCH t.priority WHERE t.id = :id";
+    private static final String FIND_TASK_BY_ID = "FROM Task t "
+            + "JOIN FETCH t.priority JOIN FETCH t.categories WHERE t.id = :id";
     private static final Logger LOGGER = LogManager.getLogger(TaskRepository.class.getName());
 
     public List<Task> findAllTasks() {

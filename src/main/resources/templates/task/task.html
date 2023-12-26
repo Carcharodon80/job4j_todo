@@ -56,6 +56,14 @@
             <label for="priority">Приоритет</label>
             <textarea class="form-control" readonly name="newPriority" id="priority"
                       th:text="${task.priority.name}"></textarea>
+            <label for="category">Категория</label>
+            <table class="table" th:border id = category>
+                <tbody>
+                <tr th:each="category:${task.categories}">
+                    <td th:text="${category.name}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <div style="display: inline-flex; float: right">

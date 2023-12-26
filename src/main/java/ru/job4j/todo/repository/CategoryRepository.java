@@ -18,7 +18,7 @@ public class CategoryRepository {
         return crudRepository.query(FIND_ALL_CATEGORIES, Category.class);
     }
 
-    public List<Category> findCategoriesById(List<Integer> categories_id) {
-        return crudRepository.query(FIND_CATEGORIES_BY_ID, Category.class, Map.of("categoriesId", categories_id));
+    public List<Category> findCategoriesById(List<Integer> categoriesId) {
+        return crudRepository.query(FIND_CATEGORIES_BY_ID, Category.class, Map.of("categoriesId", categoriesId));
     }
 }
