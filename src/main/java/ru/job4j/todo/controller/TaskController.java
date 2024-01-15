@@ -10,6 +10,7 @@ import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
+import ru.job4j.todo.util.CorrectorTimeOfCreateTask;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -23,8 +24,9 @@ public class TaskController {
     private final CategoryService categoryService;
 
     @GetMapping("/all")
-    public String showAllTasks(Model model) {
+    public String showAllTasks(Model model, HttpSession session) {
         List<Task> taskList = taskService.findAllTasks();
+        CorrectorTimeOfCreateTask.correctTime(taskList, session);
         model.addAttribute("tasks", taskList);
         model.addAttribute("priorities", priorityService.findAllPriorities());
         model.addAttribute("categories", categoryService.findAllCategories());
@@ -33,8 +35,9 @@ public class TaskController {
     }
 
     @GetMapping("/done")
-    public String showDoneTasks(Model model) {
+    public String showDoneTasks(Model model, HttpSession session) {
         List<Task> taskList = taskService.findDoneTasks();
+        CorrectorTimeOfCreateTask.correctTime(taskList, session);
         model.addAttribute("tasks", taskList);
         model.addAttribute("priorities", priorityService.findAllPriorities());
         model.addAttribute("categories", categoryService.findAllCategories());
@@ -43,8 +46,9 @@ public class TaskController {
     }
 
     @GetMapping("/undone")
-    public String showUndoneTasks(Model model) {
+    public String showUndoneTasks(Model model, HttpSession session) {
         List<Task> taskList = taskService.findUndoneTasks();
+        CorrectorTimeOfCreateTask.correctTime(taskList, session);
         model.addAttribute("tasks", taskList);
         model.addAttribute("priorities", priorityService.findAllPriorities());
         model.addAttribute("categories", categoryService.findAllCategories());

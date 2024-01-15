@@ -3,6 +3,7 @@ package ru.job4j.todo.util;
 import ru.job4j.todo.model.User;
 
 import javax.servlet.http.HttpSession;
+import java.util.TimeZone;
 
 public final class UtilUser {
     private UtilUser() {
@@ -13,6 +14,7 @@ public final class UtilUser {
         if (user == null) {
             user = new User();
             user.setName("Гость");
+            user.setTimezone(TimeZone.getDefault());
         }
         return user;
     }

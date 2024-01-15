@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.TimeZone;
 
 @Getter
 @Setter
@@ -18,6 +19,6 @@ public class User {
     private String name;
     private String login;
     private String password;
-
-
+    @Column(name = "user_zone")
+    private TimeZone timezone;
 }

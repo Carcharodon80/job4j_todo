@@ -34,6 +34,14 @@
                         <input type="text" class="form-control" id="login" name="login">
                         <label for="password">Пароль</label>
                         <input type="password" class="form-control" id="password" name="password">
+                        <label for="timezone">Часовой пояс</label>
+                        <select class="form-control" id="timezone" name="zoneID">
+                            <option th:each="zone : ${zones}"
+                                    th:selected="${zone == defaultZone}"
+                                    th:value="${zone.getID}"
+                                    th:text="${zone.getDisplayName}">
+                            </option>
+                        </select>
                     </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
                     <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Зарегистрировать</button>
